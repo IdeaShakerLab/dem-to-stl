@@ -6,6 +6,7 @@ of Canada.
 """
 
 from translationtables import CDED as translationTable
+import numpy as np
 
 def read_metadata(f):
     """
@@ -50,6 +51,7 @@ def read_data(f):
     data         = list()
     blocksize    = 1024 # TODO: Is 1024 a standard block size for USGS?
     headerlength = 144  # True for all USGS DEM
+    import pdb; pdb.set_trace()
     f.seek(blocksize + 12)
     width        = int(f.read(6).strip())
     metadata     = read_metadata(f)
@@ -76,4 +78,31 @@ def read_data(f):
         if int(float(row) / height * 100) != percentComplete:
             percentComplete = int(float(row) / height * 100)
             print("Parsing DEM... {0}% Complete".format(percentComplete))
+    return data
+    
+def read_data_asc(f):
+    """
+    Read the elevation data from 
+    the file 'f'. This data will be returned as a
+    two-dimensional list to be interpreted as:
+    [
+        Y1:[X1, X2, ...Xn],
+        Y2:[X1, X2, ...Xn],
+        ...
+        Yn:[X1, X2, ...Xn]
+    ]
+    """
+    data         = list()
+    
+    header = True
+    for line in f:
+        if not header:
+            line = line[1:-1] #remove leading space and trailing newline
+            line_list = line.split(" ")
+            float_list=[float(elem) for elem in line_list]
+            data.append(float_list)
+            
+        elif "NODATA" in line: #indicates end of header
+            header = False
+            
     return data
