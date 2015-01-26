@@ -6,7 +6,6 @@ of Canada.
 """
 
 from translationtables import CDED as translationTable
-import numpy as np
 
 def read_metadata(f):
     """
