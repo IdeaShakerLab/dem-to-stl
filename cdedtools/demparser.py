@@ -96,7 +96,7 @@ def read_data_asc(f):
     header = True
     for line in f:
         if not header:
-            line = line[1:-1] #remove leading space and trailing newline
+            line = line.strip() #strip all leading/trailing whitespace
             line_list = line.split(" ")
             float_list=[float(elem) for elem in line_list]
             data.append(float_list)
