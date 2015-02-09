@@ -17,9 +17,15 @@ parser.add_argument("sourcefile",  help="Read data from SOURCEFILE", metavar="SO
 parser.add_argument("destination", help="Save the resultion Bitmap file as DESTINATION", metavar="DESTINATION")
 args = parser.parse_args()
 
+filetype = args.sourcefile[-3:]
+
 # Open the file and process the data
 with open(args.sourcefile, "r") as f:
-    heightmap  = demparser.read_data(f)
+    if filetype == 'asc':
+        print 'asc filetype'
+        heightmap  = demparser.read_data_asc(f)
+    else:
+        heightmap  = demparser.read_data(f)
     resolution = int(args.quality)**2
     heightmap  = heightmap[::resolution]
     for y in range(len(heightmap)):
